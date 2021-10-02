@@ -19,11 +19,11 @@ public class Automata {
     private ArrayList<ArrayList<Estado>> particiones;
     private ArrayList<String> mensajeParticiones;
 
-    public Automata(String tipoAutomata, ArrayList<Estado> estados, char[] lenguajeEntrada, char[] lenguajeSalida) {
+    public Automata(String tipoAutomata, char[] lenguajeEntrada, char[] lenguajeSalida, ArrayList<Estado> estados) {
         this.tipoAutomata = tipoAutomata;
-        this.estados = estados;
         this.lenguajeEntrada = lenguajeEntrada;
         this.lenguajeSalida = lenguajeSalida;
+        this.estados = estados;
         indices = new HashMap<>();
         conexo = false;
     }
@@ -191,7 +191,7 @@ public class Automata {
         return pertenecen;
     }
 
-    private void obtenerMensajeParticiones(){
+    public void obtenerMensajeParticiones(){
         String mensaje = "";
         for(int i = 0; i < particiones.size(); i++){
             for(int j = 0; j < particiones.get(i).size(); j++){
@@ -206,7 +206,7 @@ public class Automata {
         }
     }
 
-    private ArrayList<Estado> obtenerAutomataReducido () {
+    public ArrayList<Estado> obtenerAutomataReducido () {
         ArrayList<Estado> nuevosEstados = new ArrayList<>();
         int indiceNombre = 0;
         for (int i = 0; i < particiones.size(); i++) {
