@@ -112,8 +112,8 @@ public class Automata {
                 for (int j = i+1; j < estadosConexos.size(); j++) {
                     if (estadosConexos.get(j).getVisitado() == false) {
 
-                        salida1 = String.valueOf(estadosConexos.get(i).getComportamiento());
-                        salida2 = String.valueOf(estadosConexos.get(j).getComportamiento());
+                        salida1 = String.valueOf(estadosConexos.get(i).getSalidas());
+                        salida2 = String.valueOf(estadosConexos.get(j).getSalidas());
 
                         if (salida1.equals(salida2)) {
                             estadosConexos.get(j).setVisitado(true);
@@ -212,7 +212,7 @@ public class Automata {
         for (int i = 0; i < particiones.size(); i++) {
             String nombre = "Q" + indiceNombre;
             indiceNombre++;
-            Estado e = new Estado(nombre, particiones.get(i).get(0).getComportamiento());
+            Estado e = new Estado(nombre, particiones.get(i).get(0).getSalidas());
             nuevosEstados.add(e);
         }
         for (int i = 0; i < nuevosEstados.size(); i++) {

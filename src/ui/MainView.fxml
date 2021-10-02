@@ -81,7 +81,7 @@
       </RadioButton>
       <TextField fx:id="alfabetoEntradaTF" layoutX="127.0" layoutY="79.0" promptText="S = {0, 1}" />
       <TextField fx:id="alfabetoSalidaTF" layoutX="299.0" layoutY="79.0" promptText="R = {0, 1}" />
-      <Button fx:id="reducirBtn" disable="true" layoutX="325.0" layoutY="665.0" mnemonicParsing="false" onAction="#reducirAutomata" text="Reducir autómata">
+      <Button fx:id="reducirBtn" disable="true" layoutX="325.0" layoutY="665.0" mnemonicParsing="false" onAction="#reducirAutomata" text="Reducir autómata" visible="false">
          <font>
             <Font size="15.0" />
          </font>
@@ -107,5 +107,10 @@
       </Label>
       <Separator layoutX="630.0" layoutY="39.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="6.0" />
       <TextField fx:id="estadosTF" layoutX="471.0" layoutY="79.0" promptText="Q = {a, b, c}" />
+      <Button fx:id="definirEstadosBtn" disable="true" layoutX="299.0" layoutY="665.0" mnemonicParsing="false" onAction="#definirEstados" text="Definir estados autómata">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

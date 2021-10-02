@@ -28,6 +28,9 @@ public class ViewController {
     private Button definirBtn;
 
     @FXML
+    private Button definirEstadosBtn;
+
+    @FXML
     private TextField alfabetoEntradaTF;
 
     @FXML
@@ -99,6 +102,8 @@ public class ViewController {
             reiniciarBtn.setDisable(false);
             definirBtn.setDisable(true);
             reducirBtn.setDisable(false);
+            reducirBtn.setVisible(false);
+            definirEstadosBtn.setDisable(false);
             String alfabetoEntrada = alfabetoEntradaTF.getText();
             alfabetoEntrada.replace(" ", "");
             String[] temp = alfabetoEntrada.split(",");
@@ -128,11 +133,82 @@ public class ViewController {
             }
             crearTablaGrid(nombreEstados, alfabetoE);
         }
-
     }
 
     @FXML
+    void definirEstados(ActionEvent event) {
+        if(mooreRB.isSelected()){
+            tablaAutomataGrid.getChildren().
+            for(int i = 0; i < automata.getLenguajeEntrada().length; i++){
+                for(int j = 0; j < automata.getLenguajeEntrada().length; j++){
+
+                }
+            }
+        } else{
+
+        }
+    }
+
+
+    @FXML
     void reducirAutomata(ActionEvent event) {
+        ArrayList<Estado> estadosAutomataReducido = automata.obtenerAutomataReducido();
+        particionesPane.getChildren().remove(tablaAutomataGrid);
+        tablaAutomataGrid.getChildren().clear();
+        tablaAutomataGrid.setAlignment(Pos.CENTER);
+        TextField columnas = new TextField("");
+        columnas.setDisable(true);
+        columnas.setPrefWidth(80);
+        tablaAutomataGrid.add(columnas, 0, 0);
+
+        //El lenguaje de entrada serían las columnas de la matriz
+        for(int i = 0; i < automata.getLenguajeEntrada().length; i ++){
+            columnas = new TextField(automata.getLenguajeEntrada()[i]+"");
+            columnas.setDisable(true);
+            columnas.setPrefWidth(80);
+            //La fila siempre es la 0, la columna es i+1 (porque la columna 0 ya existe)
+            tablaAutomataGrid.add(columnas, i+1, 0);
+        }
+        for(int j = 0; j < estadosAutomataReducido.size(); j++){
+            columnas = new TextField(estadosAutomataReducido.get(j).getNombre()+"");
+            columnas.setDisable(true);
+            columnas.setPrefWidth(80);
+            //La columna siempre es la 0, la fila es j+1 (porque la fila 0 ya existe)
+            tablaAutomataGrid.add(columnas, 0, j+1);
+        }
+        if(automata.getTipoAutomata().equals("Moore")){
+            columnas = new TextField("Salida");
+            columnas.setDisable(true);
+            columnas.setPrefWidth(80);
+            tablaAutomataGrid.add(columnas, automata.getLenguajeEntrada().length, 0);
+
+
+            for(int i = 1; i < estadosAutomataReducido.size(); i++){
+                for(int j = 1; j < automata.getLenguajeEntrada().length+1; j++){
+                    String nombreSiguienteEstado = estadosAutomataReducido.get(i).getEstadosSiguientes().get(j).getNombre();
+                    columnas = new TextField(nombreSiguienteEstado);
+                    columnas.setDisable(true);
+                    columnas.setPrefWidth(80);
+                    tablaAutomataGrid.add(columnas, i, j);
+                }
+                columnas = new TextField(estadosAutomataReducido.get(i).getSalidas()[0]+"");
+                columnas.setDisable(true);
+                columnas.setPrefWidth(80);
+                tablaAutomataGrid.add(columnas, automata.getLenguajeEntrada().length+1, i);
+            }
+        }else {
+            for (int i = 1; i < estadosAutomataReducido.size(); i++) {
+                for (int j = 1; j < automata.getLenguajeEntrada().length; j++) {
+
+                    String nombreEstadoSiguiente = estadosAutomataReducido.get(i).getEstadosSiguientes().get(j).getNombre();
+                    char salidaEstadoSiguiente = estadosAutomataReducido.get(i).getSalidas()[j];
+                    TextField tf = new TextField(nombreEstadoSiguiente + ", " + salidaEstadoSiguiente);
+
+                    tablaAutomataGrid.add(tf, j, i);
+                }
+            }
+        }
+        particionesPane.getChildren().add(tablaAutomataGrid);
 
         showPartitions();
     }
@@ -178,12 +254,6 @@ public class ViewController {
             //La fila siempre es la 0, la columna es i+1 (porque la columna 0 ya existe)
             tablaAutomataGrid.add(columnas, i+1, 0);
         }
-        if(mooreRB.isSelected()){
-            TextField columnas = new TextField("Salida");
-            columnas.setDisable(true);
-            columnas.setPrefWidth(80);
-            tablaAutomataGrid.add(columnas, automata.getLenguajeEntrada().length, 0);
-        }
 
         for(int j = 0; j < nombreEstados.length; j++){
             TextField columnas = new TextField(nombreEstados[j]+"");
@@ -193,6 +263,31 @@ public class ViewController {
             tablaAutomataGrid.add(columnas, 0, j+1);
         }
 
+        if(mooreRB.isSelected()){
+            TextField columnas = new TextField("Salida");
+            columnas.setDisable(true);
+            columnas.setPrefWidth(80);
+            tablaAutomataGrid.add(columnas, automata.getLenguajeEntrada().length, 0);
+
+
+            for(int i = 1; i < nombreEstados.length; i++){
+                for(int j = 1; j < alfabetoE.length+1; i++){
+                    columnas = new TextField("");
+                    columnas.setDisable(false);
+                    columnas.setPrefWidth(80);
+                    tablaAutomataGrid.add(columnas, i, j);
+                }
+            }
+        } else{
+            for(int i = 1; i < nombreEstados.length; i++){
+                for(int j = 1; j < alfabetoE.length+1; i++){
+                    TextField columnas = new TextField("");
+                    columnas.setDisable(false);
+                    columnas.setPrefWidth(80);
+                    tablaAutomataGrid.add(columnas, i, j);
+                }
+            }
+        }
         particionesPane.getChildren().add(tablaAutomataGrid);
     }
 

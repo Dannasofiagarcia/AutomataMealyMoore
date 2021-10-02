@@ -10,12 +10,12 @@ public class Estado {
     private int particionAnterior;
     //El siguiente arreglo de char contiene el comportamiento de el estado dependiendo las entradas
     //por ejemplo, si entra un 0 guardamos a que estado va y su salida (A,1)
-    private char[] comportamiento;
+    private char[] salidas;
     private ArrayList<Estado> estadosSiguientes;
 
     public Estado(String nombre, char[] comportamiento) {
         this.nombre = nombre;
-        this.comportamiento = comportamiento;
+        this.salidas = comportamiento;
         visitado = false;
     }
 
@@ -51,12 +51,12 @@ public class Estado {
         this.particionAnterior = particionAnterior;
     }
 
-    public char[] getComportamiento() {
-        return comportamiento;
+    public char[] getSalidas() {
+        return salidas;
     }
 
-    public void setComportamiento(char[] comportamiento) {
-        this.comportamiento = comportamiento;
+    public void setSalidas(char[] salidas) {
+        this.salidas = salidas;
     }
 
     public ArrayList<Estado> getEstadosSiguientes() {
