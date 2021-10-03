@@ -15,9 +15,11 @@ public class Automata {
     private char[] lenguajeEntrada;
     private char[] lenguajeSalida;
     private HashMap<Estado, Integer> indices;
-    private boolean conexo;
     private ArrayList<ArrayList<Estado>> particiones;
     private ArrayList<String> mensajeParticiones;
+    private ArrayList<Estado> estadosConexos;
+    private boolean conexo;
+
 
     public Automata(String tipoAutomata, char[] lenguajeEntrada, char[] lenguajeSalida, ArrayList<Estado> estados) {
         this.tipoAutomata = tipoAutomata;
@@ -26,6 +28,9 @@ public class Automata {
         this.estados = estados;
         indices = new HashMap<>();
         conexo = false;
+        particiones = new ArrayList<>();
+        mensajeParticiones = new ArrayList<>();
+        inicializarIndices();
     }
 
     public void reiniciarVisitado(ArrayList<Estado> arrayList){
@@ -41,11 +46,16 @@ public class Automata {
         }
     }
 
-    private ArrayList<Estado> estadosConexos(){
+    public void estadosConexos(){
         //Recorremos el automata para encontrar los estados conexos
         //y los estados inaccesibles
-        depthFirstSearch();
-        ArrayList<Estado> estadosConexos = new ArrayList<Estado>();
+        if(tipoAutomata.equals("Mealy")){
+            depthFirstSearchMealy();
+        } else{
+            depthFirstSearchMoore();
+        }
+
+        estadosConexos = new ArrayList<Estado>();
         for(Estado e : estados){
             if(e.getVisitado() == true){
                 estadosConexos.add(e);
@@ -54,13 +64,12 @@ public class Automata {
         if(estadosConexos.size() == estados.size()){
             conexo = true;
         }
-        return estadosConexos;
     }
 
-    private void depthFirstSearch(){
+    private void depthFirstSearchMoore(){
         reiniciarVisitado(estados);
 
-        Stack<Estado> stack = new Stack<Estado>();
+        Stack<Estado> stack = new Stack<>();
         boolean[] visitados = new boolean[estados.size()];
         Estado start = estados.get(0);
         stack.push(start);
@@ -68,12 +77,40 @@ public class Automata {
         while (!stack.isEmpty()){
             Estado actual = stack.pop();
             int indice = indices.get(actual);
-            visitados[indice] = true;
-            estados.get(indice).setVisitado(true);
+            if(!visitados[indice]){
+                visitados[indice] = true;
+                estados.get(indice).setVisitado(true);
+            }
 
-            for (Estado s : actual.getEstadosSiguientes()) {
-                if (!visitados[indices.get(s)]) {
-                    stack.push(s);
+            for (int i = 0; i < actual.getEstadosSiguientes().size()-1; i++) {
+                Estado e = actual.getEstadosSiguientes().get(i);
+                if (!visitados[indices.get(e)]) {
+                    stack.push(e);
+                }
+            }
+        }
+    }
+
+    private void depthFirstSearchMealy(){
+        reiniciarVisitado(estados);
+
+        Stack<Estado> stack = new Stack<>();
+        boolean[] visitados = new boolean[estados.size()];
+        Estado start = estados.get(0);
+        stack.push(start);
+
+        while (!stack.isEmpty()){
+            Estado actual = stack.pop();
+            int indice = indices.get(actual);
+            if(!visitados[indice]){
+                visitados[indice] = true;
+                estados.get(indice).setVisitado(true);
+            }
+
+            for (int i = 0; i < actual.getEstadosSiguientes().size(); i++) {
+                Estado e = actual.getEstadosSiguientes().get(i);
+                if (!visitados[indices.get(e)]) {
+                    stack.push(e);
                 }
             }
         }
@@ -87,38 +124,39 @@ public class Automata {
         }
     }
 
-    private ArrayList<ArrayList<Estado>> primeraParticion(){
-        ArrayList<Estado> estadosConexos = estadosConexos();
-
+    private void primeraParticion(){
         reiniciarVisitado(estadosConexos);
 
-        particiones = new ArrayList<>();
-        ArrayList<Estado> primeraParticion;
         String salida1;
         String salida2;
         int contadorBloques = 0;
+        particiones = new ArrayList<>();
+        ArrayList<Estado> primeraParticion;
 
-        for (int i = 0; i < estadosConexos.size()-1; i++) {
+
+        for (int i = 0; i < estadosConexos.size(); i++) {
 
             if (estadosConexos.get(i).getVisitado() == false) {
 
                 primeraParticion = new ArrayList<>();
                 primeraParticion.add(estadosConexos.get(i));
-
-                estadosConexos.get(i).setVisitado(true);
-                //estadosConexos.get(i).actualizarParticionAnterior();
                 estadosConexos.get(i).setParticion(contadorBloques);
+                estadosConexos.get(i).setVisitado(true);
 
                 for (int j = i+1; j < estadosConexos.size(); j++) {
                     if (estadosConexos.get(j).getVisitado() == false) {
 
-                        salida1 = String.valueOf(estadosConexos.get(i).getSalidas());
-                        salida2 = String.valueOf(estadosConexos.get(j).getSalidas());
+                        if(tipoAutomata.equals("Mealy")) {
+                            salida1 = String.valueOf(estadosConexos.get(i).getSalidas()[0] + estadosConexos.get(i).getSalidas()[1] + "");
+                            salida2 = String.valueOf(estadosConexos.get(j).getSalidas()[0] + estadosConexos.get(i).getSalidas()[1] + "");
+                        }else{
+                            salida1 = String.valueOf(estadosConexos.get(i).getSalidas()[0] + "");
+                            salida2 = String.valueOf(estadosConexos.get(j).getSalidas()[0] + "");
+                        }
 
                         if (salida1.equals(salida2)) {
-                            estadosConexos.get(j).setVisitado(true);
-                            //estadosConexos.get(j).actualizarParticionAnterior();
                             estadosConexos.get(j).setParticion(contadorBloques);
+                            estadosConexos.get(j).setVisitado(true);
                             primeraParticion.add(estadosConexos.get(j));
                         }
 
@@ -129,11 +167,9 @@ public class Automata {
             }
         }
         obtenerMensajeParticiones();
-        return particiones;
     }
 
-    private ArrayList<ArrayList<Estado>> particionesRestantes() {
-        ArrayList<Estado> estadosConexos = estadosConexos();
+    private void particionesRestantes() {
         ArrayList<ArrayList<Estado>> temp;
         ArrayList<Estado> particionNueva;
 
@@ -145,17 +181,16 @@ public class Automata {
             reiniciarEstadosParticiones();
 
             //Recorremos las particiones
-            temp = particiones;
+            int sizeParticiones = particiones.size();
             for (int i = 0; i < particiones.size(); i++) {
                 ArrayList<Estado> estadosParticion = particiones.get(i);
                 particionNueva = new ArrayList<Estado>();
-                contadorParticiones++;
 
                 for (int j = 0; j < estadosParticion.size() - 1; j++) {
                     Estado actual = estadosParticion.get(j);
 
                     for (int k = j+1; k < estadosParticion.size() && actual.getVisitado() == false; k++) {
-                        Estado siguiente = estadosParticion.get(j);
+                        Estado siguiente = estadosParticion.get(k);
                         if(mismaParticion(actual, siguiente) == true){
                             actual.setVisitado(true);
                         } else{
@@ -168,15 +203,15 @@ public class Automata {
                 }
                 if(particionNueva.size() != 0){
                     particiones.add(particionNueva);
+                    contadorParticiones++;
                 }
             }
             obtenerMensajeParticiones();
             //Si particiones al terminar el for es igual que al inicio, terminamos de hacer el particionamiento
-            if(particiones.equals(temp)){
+            if(particiones.size() == sizeParticiones){
                 detenerParticionamiento = true;
             }
         }
-        return particiones;
     }
 
     private boolean mismaParticion(Estado estado1, Estado estado2){
@@ -196,21 +231,33 @@ public class Automata {
         for(int i = 0; i < particiones.size(); i++){
             for(int j = 0; j < particiones.get(i).size(); j++){
                 if(j == 0) {
-                    mensaje += "{" + particiones.get(i).get(j).getNombre();
+                    if(particiones.get(i).size() == 1) {
+                        if(i != particiones.size()-1) {
+                            mensaje += "{" + particiones.get(i).get(j).getNombre() + "}, ";
+                        }else{
+                            mensaje += "{" + particiones.get(i).get(j).getNombre() + "}";
+                        }
+                    } else{
+                        mensaje += "{" + particiones.get(i).get(j).getNombre();
+                    }
                 } else if(j != 0 && j != particiones.get(i).size()-1){
                     mensaje += ", " + particiones.get(i).get(j).getNombre();
                 } else{
-                    mensaje += particiones.get(i).get(j).getNombre() + "}";
+                    mensaje += ", " + particiones.get(i).get(j).getNombre() + "}";
                 }
             }
         }
+        mensajeParticiones.add(mensaje);
     }
 
-    public ArrayList<Estado> obtenerAutomataReducido () {
+
+    public ArrayList<Estado> obtenerAutomataReducido() {
+        primeraParticion();
         ArrayList<Estado> nuevosEstados = new ArrayList<>();
+        particionesRestantes();
         int indiceNombre = 0;
         for (int i = 0; i < particiones.size(); i++) {
-            String nombre = "Q" + indiceNombre;
+            String nombre = "q" + indiceNombre;
             indiceNombre++;
             Estado e = new Estado(nombre, particiones.get(i).get(0).getSalidas());
             nuevosEstados.add(e);
@@ -223,6 +270,7 @@ public class Automata {
         }
 
         return nuevosEstados;
+
     }
 
 

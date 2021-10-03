@@ -5,18 +5,17 @@ import java.util.ArrayList;
 public class Estado {
 
     private String nombre;
-    private boolean visitado;
     private int particion;
-    private int particionAnterior;
-    //El siguiente arreglo de char contiene el comportamiento de el estado dependiendo las entradas
-    //por ejemplo, si entra un 0 guardamos a que estado va y su salida (A,1)
     private char[] salidas;
     private ArrayList<Estado> estadosSiguientes;
+    private boolean visitado;
 
-    public Estado(String nombre, char[] comportamiento) {
+    public Estado(String nombre, char[] salidas) {
         this.nombre = nombre;
-        this.salidas = comportamiento;
+        this.salidas = salidas;
+        particion = -1;
         visitado = false;
+        estadosSiguientes = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -43,13 +42,6 @@ public class Estado {
         this.particion = particion;
     }
 
-    public int getParticionAnterior() {
-        return particionAnterior;
-    }
-
-    public void setParticionAnterior(int particionAnterior) {
-        this.particionAnterior = particionAnterior;
-    }
 
     public char[] getSalidas() {
         return salidas;
@@ -65,10 +57,5 @@ public class Estado {
 
     public void setEstadosSiguientes(ArrayList<Estado> estadosSiguientes) {
         this.estadosSiguientes = estadosSiguientes;
-    }
-
-    //Este método actualiza el bloque anterior como el bloque actual dado que el bloque actual será cambiado por uno nuevo ya que hay una nueva partición
-    public void actualizarParticionAnterior(){
-        particionAnterior = particion;
     }
 }
