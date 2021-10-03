@@ -21,6 +21,9 @@ public class Automata {
     private boolean conexo;
 
 
+    /**
+     Se construye el automata con las variables necesarias como lo es el tipo, lenguaje de entrada, lenguaje de salida y los estados
+     */
     public Automata(String tipoAutomata, char[] lenguajeEntrada, char[] lenguajeSalida, ArrayList<Estado> estados) {
         this.tipoAutomata = tipoAutomata;
         this.lenguajeEntrada = lenguajeEntrada;
@@ -33,12 +36,19 @@ public class Automata {
         inicializarIndices();
     }
 
+    /**
+     Se reinicia el atributo visitado de todos los estados en el ArrayList<Estado> pasado por parametro
+     */
     public void reiniciarVisitado(ArrayList<Estado> arrayList){
         for (Estado s : arrayList) {
             s.setVisitado(false);
         }
     }
 
+
+    /**
+     Inicializamos el HashMap con los indices de cada estado, este HashMap se utiliza principalmente para hacer el recorrido dfs en el grafo
+     */
     //Inicializamos el HashMap con los indices de cada estado
     private void inicializarIndices(){
         for (int i = 0; i < estados.size(); i++) {
@@ -46,6 +56,11 @@ public class Automata {
         }
     }
 
+
+    /**
+     Por medio del recorrido dfs se marcan como visitado los estados a los que se pueda acceder, los que no queden marcados como visitado
+     son estados inaccesibles que serán eliminados.
+     */
     public void estadosConexos(){
         //Recorremos el automata para encontrar los estados conexos
         //y los estados inaccesibles
@@ -66,6 +81,9 @@ public class Automata {
         }
     }
 
+    /**
+     Recorrido depthFirstSearch para las máquinas de Moore
+     */
     private void depthFirstSearchMoore(){
         reiniciarVisitado(estados);
 
@@ -91,6 +109,9 @@ public class Automata {
         }
     }
 
+    /**
+     Recorrido depthFirstSearch para las máquinas de Mealy
+     */
     private void depthFirstSearchMealy(){
         reiniciarVisitado(estados);
 
@@ -116,6 +137,9 @@ public class Automata {
         }
     }
 
+    /**
+     Reinicia la variable visitado los estados que se encuentran dentro de las particiones
+     */
     private void reiniciarEstadosParticiones(){
         for (ArrayList<Estado> arrayList : particiones) {
             for (Estado s : arrayList){
@@ -124,6 +148,10 @@ public class Automata {
         }
     }
 
+    /**
+     Por medio de este método obtenemos la primera partición, donde se obtiene por medio de la verificación de las salidas de los estados
+     los estados que tengan las mismas salidas para el alfabeto de entrada se ubicaran en una misma partición
+     */
     private void primeraParticion(){
         reiniciarVisitado(estadosConexos);
 
@@ -169,6 +197,9 @@ public class Automata {
         obtenerMensajeParticiones();
     }
 
+    /**
+     Recorrido depthFirstSearch para las máquinas de Moore
+     */
     private void particionesRestantes() {
         ArrayList<ArrayList<Estado>> temp;
         ArrayList<Estado> particionNueva;
@@ -214,6 +245,9 @@ public class Automata {
         }
     }
 
+    /**
+     Verifica si los estados siguientes de dos estados pertenecen a la misma partición
+     */
     private boolean mismaParticion(Estado estado1, Estado estado2){
         boolean detener = false;
         boolean pertenecen = true;
@@ -226,6 +260,9 @@ public class Automata {
         return pertenecen;
     }
 
+    /**
+     Obtenemos las particiones en forma de mensaje para que pueda ser posteriormente mostrado en la interfaz al usuario
+     */
     public void obtenerMensajeParticiones(){
         String mensaje = "";
         for(int i = 0; i < particiones.size(); i++){
@@ -250,7 +287,9 @@ public class Automata {
         mensajeParticiones.add(mensaje);
     }
 
-
+    /**
+     Teniendo todas las particiones, se obtiene el automata reducido 
+     */
     public ArrayList<Estado> obtenerAutomataReducido() {
         primeraParticion();
         ArrayList<Estado> nuevosEstados = new ArrayList<>();
