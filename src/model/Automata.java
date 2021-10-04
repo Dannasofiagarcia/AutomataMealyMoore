@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Stack;
-
+/**
+ * Clase Automata encargada de generar el automata Mealy o Moore con todos sus atributos.
+ * @author Bryan
+ * @author Danna
+ *
+ */
 public class Automata {
 
     public final static String MEALY = "Mealy";
@@ -21,8 +26,13 @@ public class Automata {
     private boolean conexo;
 
 
+   
     /**
-     Se construye el automata con las variables necesarias como lo es el tipo, lenguaje de entrada, lenguaje de salida y los estados
+     * Se construye el automata con las variables necesarias como lo es el tipo, lenguaje de entrada, lenguaje de salida y los estados
+     * @param tipoAutomata hace referencia al tipo de automata a construir.
+     * @param lenguajeEntrada hace referencia al lenguaje de entrada para el automata seleccionado.
+     * @param lenguajeSalida hace referencia al lenguaje de salida para el automata seleccionado.
+     * @param estados hace referencia a los estados del automata
      */
     public Automata(String tipoAutomata, char[] lenguajeEntrada, char[] lenguajeSalida, ArrayList<Estado> estados) {
         this.tipoAutomata = tipoAutomata;
@@ -37,7 +47,8 @@ public class Automata {
     }
 
     /**
-     Se reinicia el atributo visitado de todos los estados en el ArrayList<Estado> pasado por parametro
+     *  Se reinicia el atributo visitado de todos los estados en el ArrayList<Estado> pasado por parametro
+     * @param arrayList
      */
     public void reiniciarVisitado(ArrayList<Estado> arrayList){
         for (Estado s : arrayList) {
@@ -47,7 +58,7 @@ public class Automata {
 
 
     /**
-     Inicializamos el HashMap con los indices de cada estado, este HashMap se utiliza principalmente para hacer el recorrido dfs en el grafo
+     *  Inicializamos el HashMap con los indices de cada estado, este HashMap se utiliza principalmente para hacer el recorrido dfs en el grafo.
      */
     //Inicializamos el HashMap con los indices de cada estado
     private void inicializarIndices(){
@@ -58,8 +69,8 @@ public class Automata {
 
 
     /**
-     Por medio del recorrido dfs se marcan como visitado los estados a los que se pueda acceder, los que no queden marcados como visitado
-     son estados inaccesibles que serán eliminados.
+     * Por medio del recorrido dfs se marcan como visitado los estados a los que se pueda acceder, los que no queden marcados como visitado
+     son estados inaccesibles que seran eliminados.
      */
     public void estadosConexos(){
         //Recorremos el automata para encontrar los estados conexos
@@ -82,7 +93,7 @@ public class Automata {
     }
 
     /**
-     Recorrido depthFirstSearch para las máquinas de Moore
+     * Recorrido depthFirstSearch para las maquinas de Moore
      */
     private void depthFirstSearchMoore(){
         reiniciarVisitado(estados);
@@ -110,7 +121,7 @@ public class Automata {
     }
 
     /**
-     Recorrido depthFirstSearch para las máquinas de Mealy
+     Recorrido depthFirstSearch para las maquinas de Mealy
      */
     private void depthFirstSearchMealy(){
         reiniciarVisitado(estados);
@@ -149,8 +160,8 @@ public class Automata {
     }
 
     /**
-     Por medio de este método obtenemos la primera partición, donde se obtiene por medio de la verificación de las salidas de los estados
-     los estados que tengan las mismas salidas para el alfabeto de entrada se ubicaran en una misma partición
+     Por medio de este metodo obtenemos la primera particion, donde se obtiene por medio de la verificacion de las salidas de los estados
+     los estados que tengan las mismas salidas para el alfabeto de entrada se ubicaran en una misma particion
      */
     private void primeraParticion(){
         reiniciarVisitado(estadosConexos);
@@ -198,7 +209,7 @@ public class Automata {
     }
 
     /**
-     Recorrido depthFirstSearch para las máquinas de Moore
+     Recorrido depthFirstSearch para las maquinas de Moore
      */
     private void particionesRestantes() {
         ArrayList<ArrayList<Estado>> temp;
@@ -246,7 +257,10 @@ public class Automata {
     }
 
     /**
-     Verifica si los estados siguientes de dos estados pertenecen a la misma partición
+     *  Verifica si los estados siguientes de dos estados pertenecen a la misma particion
+     * @param estado1
+     * @param estado2
+     * @return un boolean para determinar si esta o no en la misma particion
      */
     private boolean mismaParticion(Estado estado1, Estado estado2){
         boolean detener = false;

@@ -2,6 +2,11 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * Clase estado que es utilizada por la clase Automata, pues un automata puede tener uno o muchos estados.
+ * @author Bryan
+ * @author Danna
+ */
 public class Estado {
 
     private String nombre;
@@ -9,7 +14,12 @@ public class Estado {
     private char[] salidas;
     private ArrayList<Estado> estadosSiguientes;
     private boolean visitado;
-
+    
+/**	
+ * Metodo contructor para la generar un estado de un automata.
+ * @param nombre
+ * @param salidas
+ */
     public Estado(String nombre, char[] salidas) {
         this.nombre = nombre;
         this.salidas = salidas;

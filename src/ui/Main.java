@@ -12,11 +12,17 @@ public class Main extends Application {
     public Main(){
         vc = new ViewController();
     }
-
+    /**
+     * Metodo principal Main
+     * @param args
+     */
     public static void main(String[] args) {
         launch();
     }
 
+    /**
+     * Metodo estar que se encarga de ejecutar la interfaz a la hora de ejecutar el codigo principal para que todo funcione al tiempo y sincronizado.
+     */
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxml = new FXMLLoader(getClass().getResource("MainView.fxml"));

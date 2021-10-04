@@ -18,7 +18,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Clase View encargada de todo el control de la interfaz grafica.
+ * @author Bryan
+ * @author Danna
+ */
 public class ViewController {
 
     @FXML
@@ -76,7 +80,9 @@ public class ViewController {
     void initialize(){
 
     }
-
+/**
+ * Metodo encargado de mostrar las particiones del automata.
+ */
     void showPartitions(){
         pInicialLabel.setText("Pinicial = ");
         pDosLabel.setVisible(true);
@@ -106,6 +112,10 @@ public class ViewController {
         }
     }
 
+    /**
+     * Metodo encargado de definir el automata.
+     * @param event al hacer click en el boton se ejecuta este metodo.
+     */
     @FXML
     void definirAutomata(ActionEvent event) {
         System.out.println(alfabetoEntradaTF.getText());
@@ -164,6 +174,10 @@ public class ViewController {
         }
     }
 
+    /**
+     * Metodo encargado de definir los estados del automata.
+     * @param event al hacer click en el boton se ejecuta la accion codificada en el metodo.
+     */
     @FXML
     void definirEstados(ActionEvent event) {
       for(Node nodo : tablaAutomataGrid.getChildren()){
@@ -273,6 +287,10 @@ public class ViewController {
         }
     }
 
+    /**
+     * Metodo encargado de realizar la reduccion del automata despues de todo el proceso de particionamiento.
+     * @param event al hacer click en el boton se ejecuta la aaccion propuesta en el metodo.
+     */
     @FXML
     void reducirAutomata(ActionEvent event) {
         ArrayList<Estado> estadosAutomataReducido = automata.obtenerAutomataReducido();
@@ -330,6 +348,10 @@ public class ViewController {
         showPartitions();
     }
 
+    /**
+     * Metodo en cargado de reiniciar todo el programa cuando se necesite realizar un nuevo automata.
+     * @param event al hacer click en el boton se ejecuta la accion para reiniciar el programa.
+     */
     @FXML
     void reiniciar(ActionEvent event) {
         mooreRB.setDisable(false);
@@ -354,7 +376,12 @@ public class ViewController {
         tablaAutomataGrid.getChildren().clear();
         definirEstadosBtn.setVisible(true);
     }
-
+    
+    /**
+     * Metodo encargado de crear la tabla donde se van ingresar los vamos de entrada y salida dependiendo del automata.
+     * @param nombreEstados
+     * @param alfabetoE
+     */
     void crearTablaGrid(char[] nombreEstados, char[] alfabetoE){
         particionesPane.getChildren().remove(tablaAutomataGrid);
         //tablaAutomataGrid.getChildren().clear();
@@ -402,6 +429,11 @@ public class ViewController {
         particionesPane.getChildren().add(tablaAutomataGrid);
     }
 
+    /**
+     * Metodo para convertir los String en Char.
+     * @param cadena
+     * @return retorna un array de char.
+     */
     char[] convertirStringEnChar(String[] cadena) {
         char[] resultado = new char[cadena.length];
         for (int i = 0; i < cadena.length; i++) {
