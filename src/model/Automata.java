@@ -209,7 +209,7 @@ public class Automata {
 
     /**
      *se encarga de realizar las n particiones que se puedan realizar al algoritmo verificando que los estadios
-     *siguientes pertenezcan a la misma partición teniendo en cuenta la partición 1
+     *siguientes pertenezcan a la misma particion teniendo en cuenta la particion 1
      */
     private void particionesRestantes() {
         ArrayList<ArrayList<Estado>> temp;
