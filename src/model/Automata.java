@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Stack;
 /**
  * Clase Automata encargada de generar el automata Mealy o Moore con todos sus atributos.
@@ -69,8 +68,8 @@ public class Automata {
 
 
     /**
-     * Por medio del recorrido dfs se marcan como visitado los estados a los que se pueda acceder, los que no queden marcados como visitado
-     son estados inaccesibles que seran eliminados.
+     * Por medio del recorrido dfs se marcan como visitado los estados a los que se pueda acceder, los que no queden marcados como visitado 
+     * son estados inaccesibles que seran eliminados.
      */
     public void estadosConexos(){
         //Recorremos el automata para encontrar los estados conexos
@@ -121,7 +120,7 @@ public class Automata {
     }
 
     /**
-     Recorrido depthFirstSearch para las maquinas de Mealy
+     *Recorrido depthFirstSearch para las maquinas de Mealy
      */
     private void depthFirstSearchMealy(){
         reiniciarVisitado(estados);
@@ -149,7 +148,7 @@ public class Automata {
     }
 
     /**
-     Reinicia la variable visitado los estados que se encuentran dentro de las particiones
+     *Reinicia la variable visitado los estados que se encuentran dentro de las particiones
      */
     private void reiniciarEstadosParticiones(){
         for (ArrayList<Estado> arrayList : particiones) {
@@ -160,8 +159,8 @@ public class Automata {
     }
 
     /**
-     Por medio de este metodo obtenemos la primera particion, donde se obtiene por medio de la verificacion de las salidas de los estados
-     los estados que tengan las mismas salidas para el alfabeto de entrada se ubicaran en una misma particion
+     *Por medio de este metodo obtenemos la primera particion, donde se obtiene por medio de la verificacion de las salidas de los estados
+     *los estados que tengan las mismas salidas para el alfabeto de entrada se ubicaran en una misma particion
      */
     private void primeraParticion(){
         reiniciarVisitado(estadosConexos);
@@ -209,7 +208,8 @@ public class Automata {
     }
 
     /**
-     Recorrido depthFirstSearch para las maquinas de Moore
+     *se encarga de realizar las n particiones que se puedan realizar al algoritmo verificando que los estadios
+     *siguientes pertenezcan a la misma partición teniendo en cuenta la partición 1
      */
     private void particionesRestantes() {
         ArrayList<ArrayList<Estado>> temp;
@@ -275,7 +275,7 @@ public class Automata {
     }
 
     /**
-     Obtenemos las particiones en forma de mensaje para que pueda ser posteriormente mostrado en la interfaz al usuario
+     *Obtenemos las particiones en forma de mensaje para que pueda ser posteriormente mostrado en la interfaz al usuario.
      */
     public void obtenerMensajeParticiones(){
         String mensaje = "";
@@ -302,7 +302,7 @@ public class Automata {
     }
 
     /**
-     Teniendo todas las particiones, se obtiene el automata reducido 
+     *Teniendo todas las particiones, se obtiene el automata reducido. 
      */
     public ArrayList<Estado> obtenerAutomataReducido() {
         primeraParticion();

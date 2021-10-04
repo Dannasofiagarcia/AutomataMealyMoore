@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import model.Automata;
 import model.Estado;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,11 +111,12 @@ public class ViewController {
         }
     }
 
+    
+    @FXML
     /**
      * Metodo encargado de definir el automata.
      * @param event al hacer click en el boton se ejecuta este metodo.
      */
-    @FXML
     void definirAutomata(ActionEvent event) {
         System.out.println(alfabetoEntradaTF.getText());
         System.out.println(alfabetoSalidaTF.getText());
@@ -174,11 +174,12 @@ public class ViewController {
         }
     }
 
+    
+    @FXML
     /**
      * Metodo encargado de definir los estados del automata.
      * @param event al hacer click en el boton se ejecuta la accion codificada en el metodo.
      */
-    @FXML
     void definirEstados(ActionEvent event) {
       for(Node nodo : tablaAutomataGrid.getChildren()){
           TextField textField = (TextField) nodo;
@@ -287,11 +288,12 @@ public class ViewController {
         }
     }
 
+    
+    @FXML
     /**
      * Metodo encargado de realizar la reduccion del automata despues de todo el proceso de particionamiento.
      * @param event al hacer click en el boton se ejecuta la aaccion propuesta en el metodo.
      */
-    @FXML
     void reducirAutomata(ActionEvent event) {
         ArrayList<Estado> estadosAutomataReducido = automata.obtenerAutomataReducido();
         particionesPane.getChildren().remove(tablaAutomataGrid);
@@ -348,11 +350,12 @@ public class ViewController {
         showPartitions();
     }
 
+    
+    @FXML
     /**
      * Metodo en cargado de reiniciar todo el programa cuando se necesite realizar un nuevo automata.
      * @param event al hacer click en el boton se ejecuta la accion para reiniciar el programa.
      */
-    @FXML
     void reiniciar(ActionEvent event) {
         mooreRB.setDisable(false);
         mealyRB.setDisable(false);
@@ -379,8 +382,8 @@ public class ViewController {
     
     /**
      * Metodo encargado de crear la tabla donde se van ingresar los vamos de entrada y salida dependiendo del automata.
-     * @param nombreEstados
-     * @param alfabetoE
+     * @param nombreEstados nombre de los estados
+     * @param alfabetoE alfabeto del automata.
      */
     void crearTablaGrid(char[] nombreEstados, char[] alfabetoE){
         particionesPane.getChildren().remove(tablaAutomataGrid);

@@ -17,8 +17,8 @@ public class Estado {
     
 /**	
  * Metodo contructor para la generar un estado de un automata.
- * @param nombre
- * @param salidas
+ * @param nombre nombre del estado.
+ * @param salidas valores de salida del estado.
  */
     public Estado(String nombre, char[] salidas) {
         this.nombre = nombre;
